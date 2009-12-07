@@ -1,0 +1,7 @@
+= SHH
+
+Secret Squirrel
+
+This is a command line utility for managing secure information such as accounts, passwords as individual files so that they can be easily managed in a version control repository.
+
+You won't be hiding anything from the NSA with this level of encryption so it isn't recommended that you make your repository publicly accessible.
