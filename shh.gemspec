@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name = 'shh'
-  spec.version = '0.0.1'
+  spec.version = '0.0.2'
   spec.summary = "command line utility for managing secure information"
   spec.description = <<-EOF
 A command line utility that manages accounts and passwords as individual encypted files
@@ -15,4 +15,5 @@ EOF
  
   spec.add_dependency 'highline', ['~>1.5.1']
   spec.add_dependency 'uuid', ['~>2.1.0']
+  spec.add_dependency 'crypt', ['~>1.1.4']
 end
