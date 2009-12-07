@@ -1,17 +1,15 @@
 require 'rubygems'
 require 'pathname2'
 require 'highline/import'
-require 'uuid'
+require 'uuidtools'
 require 'shh/crypt'
 require 'yaml'
-require 'pathname2' # don't ask why i'm loading this twice
 
 module Shh
   class Cli
     def execute *args
       passphrase = ask('Enter your passphrase') { |q| q.echo = false }
 
-      @uuid = UUID.new
       @folder = Pathname.new('secret')
       @folder.mkdir_p
       @crypt = Crypt.new(passphrase)
@@ -34,7 +32,7 @@ module Shh
     end
 
     def create name=''
-      hash = {'name' => check_name(name), 'id' => @uuid.generate}
+      hash = {'name' => check_name(name), 'id' => UUIDTools::UUID.random_create.to_s}
       persist_entry prompt_loop(hash)
     end
 
