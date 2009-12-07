@@ -16,4 +16,5 @@ EOF
   spec.add_dependency 'highline', ['~>1.5.1']
   spec.add_dependency 'uuid', ['~>2.1.0']
   spec.add_dependency 'crypt', ['~>1.1.4']
+  spec.add_dependency 'pathname2', ['~>1.6.3']
 end
