@@ -15,5 +15,12 @@ desc "Install #{spec.name} locally"
 task :install do
   sh "gem build #{spec.name}.gemspec"
   sudo = "sudo" unless File.writable?( Gem::ConfigMap[:bindir])
-  sh "#{sudo} gem install #{spec.name}-#{spec.version}.gem"
+  sh "#{sudo} gem install #{spec.name}-#{spec.version}.gem --no-ri --no-rdoc"
+end
+
+desc "Uninstall #{spec.name} locally"
+task :uninstall do
+  sh "gem build #{spec.name}.gemspec"
+  sudo = "sudo" unless File.writable?( Gem::ConfigMap[:bindir])
+  sh "#{sudo} gem uninstall #{spec.name} -x -a"
 end

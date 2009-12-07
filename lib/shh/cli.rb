@@ -44,7 +44,7 @@ module Shh
     end
 
     def view name=''
-      prompt_loop load_entry(check_name(name)), true
+      prompt_loop find_entry(check_name(name)), true
     end
 
 private
