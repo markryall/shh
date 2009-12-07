@@ -1,14 +1,17 @@
 require 'rubygems'
 require 'pathname2'
 require 'highline/import'
+require 'uuid'
 require 'shh/crypt'
 require 'yaml'
+require 'pathname2' # don't ask why i'm loading this twice
 
 module Shh
   class Cli
     def execute *args
       passphrase = ask('Enter your passphrase') { |q| q.echo = false }
 
+      @uuid = UUID.new
       @folder = Pathname.new('secret')
       @folder.mkdir_p
       @crypt = Crypt.new(passphrase)
@@ -27,18 +30,17 @@ module Shh
     end
 
     def list
-      @folder.entries.each do |child|
-        say(child) unless ['.','..'].include?(child.to_s)
-      end
+      each_entry {|entry| say "#{entry['name']} - #{entry['id']}" }
     end
 
     def create name=''
-      persist_entry check_name(name), prompt_loop({})
+      hash = {'name' => check_name(name), 'id' => @uuid.generate}
+      persist_entry prompt_loop(hash)
     end
 
     def edit name=''
       name = check_name(name)
-      persist_entry name, prompt_loop(load_entry(name))
+      persist_entry prompt_loop(find_entry(name))
     end
 
     def view name=''
@@ -47,18 +49,28 @@ module Shh
 
 private
 
+    def each_entry
+      @folder.children.each do |child|
+        yield load_entry(child)
+      end
+    end
+
     def check_name name
       name = ask('Enter the entry name') unless name.size > 0
       name
     end
 
-    def load_entry name
-      entry = (@folder + name).open('r') {|io| @crypt.decrypt(io) }
+    def find_entry name
+      each_entry {|e| return e if e['name'] == name}
+    end
+
+    def load_entry path
+      entry = path.open('r') {|io| @crypt.decrypt(io) }
       YAML::load(entry)
     end
 
-    def persist_entry name, entry
-      (@folder + name).open('w') {|io| @crypt.encrypt(entry.to_yaml, io) }
+    def persist_entry entry
+      (@folder + entry['id']).open('w') {|io| @crypt.encrypt(entry.to_yaml, io) }
     end
 
     def prompt_loop hash, read_only=false
