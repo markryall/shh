@@ -2,8 +2,9 @@ require 'rubygems'
 require 'pathname2'
 require 'highline/import'
 require 'uuidtools'
-require 'shh/crypt'
 require 'yaml'
+require 'shh/crypt'
+require 'shh/clipboard'
 
 module Shh
   class Cli
@@ -13,13 +14,13 @@ module Shh
       @folder = Pathname.new('secret')
       @folder.mkdir_p
       @crypt = Crypt.new(passphrase)
+      @clipboard = Shh.clipboard
 
       loop do
         choose do |menu|
           menu.layout = :menu_only
           menu.shell  = true
           menu.choice('list entries') { list }
-          menu.choice('create entry') { |command, details| create details }
           menu.choice('edit entry') { |command, details| edit details }
           menu.choice('view entry') { |command, details| view details }
           menu.choice('quit') { exit }
@@ -28,17 +29,13 @@ module Shh
     end
 
     def list
-      each_entry {|entry| say "#{entry['name']} - #{entry['id']}" }
-    end
-
-    def create name=''
-      hash = {'name' => check_name(name), 'id' => UUIDTools::UUID.random_create.to_s}
-      persist_entry prompt_loop(hash)
+      each_entry {|entry| say "#{entry['name']} (#{entry['id']})" }
     end
 
     def edit name=''
-      name = check_name(name)
-      persist_entry prompt_loop(find_entry(name))
+      entry = find_entry(check_name(name))
+      entry ||= {'name' => check_name(name), 'id' => UUIDTools::UUID.random_create.to_s}
+      persist_entry prompt_loop(entry)
     end
 
     def view name=''
@@ -60,15 +57,16 @@ private
 
     def find_entry name
       each_entry {|e| return e if e['name'] == name}
+      nil
     end
 
     def load_entry path
-      entry = path.open('r') {|io| @crypt.decrypt(io) }
+      entry = path.open('rb') {|io| @crypt.decrypt(io) }
       YAML::load(entry)
     end
 
     def persist_entry entry
-      (@folder + entry['id']).open('w') {|io| @crypt.encrypt(entry.to_yaml, io) }
+      (@folder + entry['id']).open('wb') {|io| @crypt.encrypt(entry.to_yaml, io) }
     end
 
     def prompt_loop hash, read_only=false
@@ -76,10 +74,11 @@ private
         choose do |menu|
           menu.layout = :menu_only
           menu.shell  = true
-          menu.choice('create key') { |command, name| hash[name] = new_value(name) } unless read_only
+          menu.choice('edit key') { |command, name| hash[name] = new_value(name) } unless read_only
           menu.choice('list keys') { say(hash.keys.sort.join(',')) }
           menu.choice('show key') { |command, name| say(hash[name]) if hash[name] }
           menu.choice('delete key') { |command, name| hash[name] = nil } unless read_only
+          menu.choice('copy key') { |command, name| @clipboard.content = hash[name] } if @clipboard
           menu.choice('quit') { return hash }
         end
       end
