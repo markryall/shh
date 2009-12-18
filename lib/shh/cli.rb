@@ -11,7 +11,8 @@ module Shh
     def execute *args
       passphrase = ask('Enter your passphrase') { |q| q.echo = false }
 
-      @folder = Pathname.new('secret')
+      path = args.shift || ('~')
+      @folder = Pathname.new(File.expand_path(path)) + '.secret'
       @folder.mkdir_p
       @crypt = Crypt.new(passphrase)
       @clipboard = Shh.clipboard
@@ -46,7 +47,8 @@ private
 
     def each_entry
       @folder.children.each do |child|
-        yield load_entry(child)
+        entry = load_entry(child)
+        yield entry if entry
       end
     end
 
@@ -61,8 +63,11 @@ private
     end
 
     def load_entry path
-      entry = path.open('rb') {|io| @crypt.decrypt(io) }
-      YAML::load(entry)
+      return nil if path.directory?
+      yaml = path.open('rb') {|io| @crypt.decrypt(io) }
+      entry = YAML::load(yaml)
+      return nil unless entry
+      path.basename.to_s == entry['id'] ? entry : nil
     end
 
     def persist_entry entry
