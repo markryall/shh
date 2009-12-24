@@ -5,3 +5,56 @@ Secret Squirrel
 This is a command line utility for managing secure information such as accounts, passwords as individual files so that they can be easily managed in a version control repository.
 
 You won't be hiding anything from the NSA with this level of encryption so it isn't recommended that you make your repository publicly accessible.
+
+= Usage
+
+Here you sit expectantly in front of a computer at the command line.
+
+== Install
+
+  gem install shh
+
+(you may need to install gemcutter first)
+
+== Launch
+
+Open all 'secrets' stored in ~/.secret
+
+  > *shh*
+
+Opens all 'secrets' stored in foo/.secret
+
+  > *shh foo*
+
+== Authenticate
+
+  Enter your passphrase
+
+This passphrase will be used to encrypt and decrypt all of your secrets so don't make it too obvious.
+
+== Listing mode
+
+This mode allows you to view and edit 'entries' (which are encrypted hashes stored in files)
+
+  list entries, edit entry, view entry or quit?  *l*
+
+  bitbucket (260f34de-6779-4367-af2a-44184dec1cc1)
+  amazon (291a3e6c-2c7b-4960-a146-1f6635d9a74e)
+  yahoo (2fe408e7-7f2b-4dc0-854a-c92c21f131ae)
+  evernote (41ad0a21-eafc-4f70-9b0d-0251be207b9e)
+  gmail (8b35c1f2-851d-40fc-bd12-c2aad12c370a)
+  rememberthemilk (a499f612-d034-4e49-82a8-6967d29653a1)
+
+== Viewing mode
+
+This mode allows you to view (but not edit) an existing entry
+
+   list entries, edit entry, view entry or quit? *v bitbucket*
+
+== Editing mode
+
+  list entries, edit entry, view entry or quit?  *e bitbucket*
+
+
+
+  
