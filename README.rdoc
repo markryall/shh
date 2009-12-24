@@ -20,11 +20,11 @@ Here you sit expectantly in front of a computer at the command line.
 
 Open all 'secrets' stored in ~/.secret
 
-  > *shh*
+  > shh
 
 Opens all 'secrets' stored in foo/.secret
 
-  > *shh foo*
+  > shh foo
 
 == Authenticate
 
@@ -36,7 +36,7 @@ This passphrase will be used to encrypt and decrypt all of your secrets so don't
 
 This mode allows you to view and edit 'entries' (which are encrypted hashes stored in files)
 
-  list entries, edit entry, view entry or quit?  *l*
+  list entries, edit entry, view entry or quit? l
 
   bitbucket (260f34de-6779-4367-af2a-44184dec1cc1)
   amazon (291a3e6c-2c7b-4960-a146-1f6635d9a74e)
@@ -45,16 +45,49 @@ This mode allows you to view and edit 'entries' (which are encrypted hashes stor
   gmail (8b35c1f2-851d-40fc-bd12-c2aad12c370a)
   rememberthemilk (a499f612-d034-4e49-82a8-6967d29653a1)
 
+* l - show entries
+* e - edit or create entry
+* v - view entry
+
 == Viewing mode
 
 This mode allows you to view (but not edit) an existing entry
 
-   list entries, edit entry, view entry or quit? *v bitbucket*
+  list entries, edit entry, view entry or quit? v bitbucket
+  list keys, show key, copy key or quit?  l
+  id,name,password,username
+  list keys, show key, copy key or quit?  s username
+  markryall
+
+  list keys, show key, copy key or quit?  c password
+
+* l - show entry keys
+* s - show entry value on screen
+* c - copy entry value to clipboard
 
 == Editing mode
 
-  list entries, edit entry, view entry or quit?  *e bitbucket*
+This mode is viewing mode plus some editing commands
 
+  list entries, edit entry, view entry or quit? e bitbucket
+  edit key, list keys, show key, delete key, copy key or quit? e foo
+  Enter new value for foo
+  bar
+  edit key, list keys, show key, delete key, copy key or quit? d foo
 
+* e - edit or create key
+* d - remove a key
 
-  
+== Quitting mode
+
+You don't want to be a quitter
+
+= Future plans for world domination
+
+* Add tab completion
+* Add some color
+* Add help
+* Launch applications for urls
+* Add multi line values (edit with default text editor)
+* Include uuid as part of encryption key (and upgrade encryption on existing entries)
+* add some source control (hg/git) commands
