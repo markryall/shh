@@ -17,14 +17,14 @@ module Shh
           line.strip!
           case line
             when 'quit'
-              break
+              return
             when 'refresh'
               refresh
             when 'list'
-              @entries.each {|entry| say entry }
-            when /^view (.*)/
+              @entries.sort.each {|entry| say entry }
+            when /^view,(.*)/
               view $1
-            when /^edit (.*)/
+            when /^edit,(.*)/
               edit $1
           end
           puts
@@ -40,13 +40,12 @@ module Shh
       @entries = []
       @repository.each_entry do |entry|
         @entries << "#{entry['name']} (#{entry['id']})"
-        commands << "edit #{entry['name']}"
-        commands << "view #{entry['name']}"
+        commands << "edit,#{entry['name']}"
+        commands << "view,#{entry['name']}"
       end
       Readline.completion_proc = lambda do |text|
         commands.grep( /^#{Regexp.escape(text)}/ ).sort
       end
-      Readline.completer_word_break_characters = ''
     end
 
     def edit name
