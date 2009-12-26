@@ -4,6 +4,8 @@ require 'shh/crypt'
 
 module Shh
   class Repository
+    attr_reader :folder
+
     def initialize passphrase, path
       @folder = Pathname.new(File.expand_path(path)) + '.secret'
       @folder.mkdir_p
