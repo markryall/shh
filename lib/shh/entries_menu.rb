@@ -10,13 +10,14 @@ module Shh
     end
 
     def main_loop
-      prompt_text = ' > '
+      prompt_text = 'shh > '
 
       begin
-        while line = Readline.readline(prompt_text, true).strip
+        while line = Readline.readline(prompt_text, true)
+          line.strip!
           case line
             when 'quit'
-              return
+              break
             when 'refresh'
               refresh
             when 'list'
@@ -26,10 +27,12 @@ module Shh
             when /^edit (.*)/
               edit $1
           end
+          puts
         end
       rescue Interrupt => e
-        return
+        exit
       end
+      puts
     end
 
     def refresh

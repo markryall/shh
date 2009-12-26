@@ -9,13 +9,14 @@ module Shh
     end
 
     def main_loop
-      prompt_text = "(#{@hash['name']}) > "
+      prompt_text = "shh:#{@hash['name']} > "
 
       begin
-        while line = Readline.readline(prompt_text, true).strip
+        while line = Readline.readline(prompt_text, true)
+          line.strip!
           case line
             when 'quit'
-              return @hash
+              break
             when 'list'
               say(@hash.keys.sort.join(','))
             when /^edit (.*)/
@@ -33,8 +34,11 @@ module Shh
           end
         end
       rescue Interrupt => e
-        return @hash
+        exit
       end
+
+      puts
+      @hash
     end
 
 private
