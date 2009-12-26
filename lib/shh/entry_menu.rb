@@ -9,12 +9,10 @@ module Shh
     end
 
     def main_loop
-      Readline.completion_proc = @completion
-      Readline.completer_word_break_characters = ''
-      prompt = "(#{@hash['name']}) > "
+      prompt_text = "(#{@hash['name']}) > "
 
       begin
-        while line = Readline.readline(prompt, true).strip
+        while line = Readline.readline(prompt_text, true).strip
           case line
             when 'quit'
               return @hash
@@ -49,9 +47,10 @@ private
         commands << "show #{key}"
         commands << "copy #{key}"
       end
-      @completion = lambda do |text|
+      Readline.completion_proc = lambda do |text|
         commands.grep( /^#{Regexp.escape(text)}/ ).sort
       end
+      Readline.completer_word_break_characters = ''
     end
 
     def new_value name

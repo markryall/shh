@@ -6,6 +6,8 @@ This is a command line utility for managing secure information such as accounts,
 
 You won't be hiding anything from the NSA with this level of encryption so it isn't recommended that you make your repository publicly accessible.
 
+Now with more tab completion!
+
 = Usage
 
 Here you sit expectantly in front of a computer at the command line.
@@ -36,7 +38,7 @@ This passphrase will be used to encrypt and decrypt all of your secrets so don't
 
 This mode allows you to view and edit 'entries' (which are encrypted hashes stored in files)
 
-  list entries, edit entry, view entry or quit? l
+  > list
 
   bitbucket (260f34de-6779-4367-af2a-44184dec1cc1)
   amazon (291a3e6c-2c7b-4960-a146-1f6635d9a74e)
@@ -45,38 +47,40 @@ This mode allows you to view and edit 'entries' (which are encrypted hashes stor
   gmail (8b35c1f2-851d-40fc-bd12-c2aad12c370a)
   rememberthemilk (a499f612-d034-4e49-82a8-6967d29653a1)
 
-* l - show entries
-* e - edit or create entry
-* v - view entry
+* list - show entries
+* edit <name> - edit or create entry
+* view <name> - view entry
+* quit
 
 == Viewing mode
 
 This mode allows you to view (but not edit) an existing entry
 
-  list entries, edit entry, view entry or quit? v bitbucket
-  list keys, show key, copy key or quit?  l
+  > view bitbucket
+  (bitbucket) > list
   id,name,password,username
-  list keys, show key, copy key or quit?  s username
+  (bitbucket) > show username
   markryall
 
   list keys, show key, copy key or quit?  c password
 
-* l - show entry keys
-* s - show entry value on screen
-* c - copy entry value to clipboard
+* list - show entry keys
+* show <key> - show entry value on screen
+* copy <key> - copy entry value to clipboard
+* quit
 
 == Editing mode
 
 This mode is viewing mode plus some editing commands
 
-  list entries, edit entry, view entry or quit? e bitbucket
-  edit key, list keys, show key, delete key, copy key or quit? e foo
+  > edit bitbucket
+  (bitbucket) > edit foo
   Enter new value for foo
   bar
-  edit key, list keys, show key, delete key, copy key or quit? d foo
+  (bitbucket) > delete foo
 
-* e - edit or create key
-* d - remove a key
+* edit <key> - edit or create key
+* delete <key> - remove a key
 
 == Quitting mode
 
@@ -84,7 +88,6 @@ You don't want to be a quitter
 
 = Future plans for world domination
 
-* Add tab completion
 * Add some color
 * Add help
 * Launch applications for urls

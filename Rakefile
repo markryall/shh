@@ -10,7 +10,7 @@ task :push do
   sh "gem build #{spec.name}.gemspec"
   sh "gem push #{spec.name}-#{spec.version}.gem"
 end
- 
+
 desc "Install #{spec.name} locally"
 task :install do
   sh "gem build #{spec.name}.gemspec"

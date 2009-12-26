@@ -10,12 +10,10 @@ module Shh
     end
 
     def main_loop
-      Readline.completion_proc = @completion
-      Readline.completer_word_break_characters = ''
-      prompt = ' > '
+      prompt_text = ' > '
 
       begin
-        while line = Readline.readline(prompt, true).strip
+        while line = Readline.readline(prompt_text, true).strip
           case line
             when 'quit'
               return
@@ -40,9 +38,10 @@ module Shh
         commands << "edit #{entry['name']}"
         commands << "view #{entry['name']}"
       end
-      @completion = lambda do |text|
+      Readline.completion_proc = lambda do |text|
         commands.grep( /^#{Regexp.escape(text)}/ ).sort
       end
+      Readline.completer_word_break_characters = ''
     end
 
     def list
