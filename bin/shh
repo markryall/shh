@@ -2,4 +2,4 @@
 
 $:.unshift File.dirname(__FILE__)+'/../lib'
 require 'shh'
-Shh::Cli.new.execute(*ARGV)
+Shh::Cli.execute(*ARGV)
