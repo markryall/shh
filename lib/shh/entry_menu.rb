@@ -2,8 +2,8 @@ require 'shh/clipboard'
 
 module Shh
   class EntryMenu
-    def initialize hash, read_only=false
-      @hash, @read_only = hash, read_only
+    def initialize prompt, hash, read_only=false
+      @prompt, @hash, @read_only = prompt, hash, read_only
       @clipboard = Shh.clipboard
     end
 
@@ -25,8 +25,7 @@ module Shh
 private
 
     def new_value name
-      echo = (name =~ /pass/) ? false : true
-      ask("Enter new value for #{name}") {|q| q.echo = echo }
+      @prompt.get "Enter new value for #{name}", :silent => (name =~ /pass/)
     end
   end
 end

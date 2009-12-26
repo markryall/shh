@@ -1,15 +1,16 @@
 require 'rubygems'
 require 'shh/repository'
+require 'shh/prompt'
 require 'shh/entries_menu'
-require 'highline/import'
 
 module Shh
   class Cli
     def self.execute *args
-      passphrase = ask('Enter your passphrase') { |q| q.echo = false }
+      prompt = Prompt.new
+      passphrase = prompt.get('Enter your passphrase', :silent => true)
       path = args.shift || ('~')
 
-      EntriesMenu.new(Repository.new(passphrase, path)).main_loop
+      EntriesMenu.new(prompt, Repository.new(passphrase, path)).main_loop
     end
   end
 end

@@ -3,8 +3,8 @@ require 'shh/entry_menu'
 
 module Shh
   class EntriesMenu
-    def initialize repository
-      @repository = repository
+    def initialize prompt, repository
+      @prompt, @repository = prompt, repository
     end
 
     def main_loop
@@ -27,18 +27,17 @@ module Shh
     def edit name=''
       entry = @repository.find_entry(check_name(name))
       entry ||= {'name' => check_name(name), 'id' => UUIDTools::UUID.random_create.to_s}
-      @repository.persist_entry EntryMenu.new(entry).main_loop
+      @repository.persist_entry EntryMenu.new(@prompt, entry).main_loop(prompt)
     end
 
     def view name=''
-      EntryMenu.new(@repository.find_entry(check_name(name)), true).main_loop
+      EntryMenu.new(@prompt, @repository.find_entry(check_name(name)), true).main_loop
     end
 
 private
 
     def check_name name
-      name = ask('Enter the entry name') unless name.size > 0
-      name
+      @prompt.get('Enter the entry name', :value => name)
     end
   end
 end
