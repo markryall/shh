@@ -1,20 +1,16 @@
 require 'rubygems'
-require 'pathname2'
+require 'shh/repository'
 require 'highline/import'
 require 'uuidtools'
-require 'yaml'
-require 'shh/crypt'
 require 'shh/clipboard'
 
 module Shh
   class Cli
     def execute *args
       passphrase = ask('Enter your passphrase') { |q| q.echo = false }
-
       path = args.shift || ('~')
-      @folder = Pathname.new(File.expand_path(path)) + '.secret'
-      @folder.mkdir_p
-      @crypt = Crypt.new(passphrase)
+
+      @repository = Repository.new(passphrase, path)
       @clipboard = Shh.clipboard
 
       loop do
@@ -30,48 +26,24 @@ module Shh
     end
 
     def list
-      each_entry {|entry| say "#{entry['name']} (#{entry['id']})" }
+      @repository.each_entry {|entry| say "#{entry['name']} (#{entry['id']})" }
     end
 
     def edit name=''
-      entry = find_entry(check_name(name))
+      entry = @repository.find_entry(check_name(name))
       entry ||= {'name' => check_name(name), 'id' => UUIDTools::UUID.random_create.to_s}
-      persist_entry prompt_loop(entry)
+      @repository.persist_entry prompt_loop(entry)
     end
 
     def view name=''
-      prompt_loop find_entry(check_name(name)), true
+      prompt_loop @repository.find_entry(check_name(name)), true
     end
 
 private
 
-    def each_entry
-      @folder.children.each do |child|
-        entry = load_entry(child)
-        yield entry if entry
-      end
-    end
-
     def check_name name
       name = ask('Enter the entry name') unless name.size > 0
       name
-    end
-
-    def find_entry name
-      each_entry {|e| return e if e['name'] == name}
-      nil
-    end
-
-    def load_entry path
-      return nil if path.directory?
-      yaml = path.open('rb') {|io| @crypt.decrypt(io) }
-      entry = YAML::load(yaml)
-      return nil unless entry
-      path.basename.to_s == entry['id'] ? entry : nil
-    end
-
-    def persist_entry entry
-      (@folder + entry['id']).open('wb') {|io| @crypt.encrypt(entry.to_yaml, io) }
     end
 
     def prompt_loop hash, read_only=false
