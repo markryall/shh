@@ -21,7 +21,7 @@ module Shh
             when 'refresh'
               refresh
             when 'list'
-              list
+              @entries.each {|entry| say entry }
             when /^view (.*)/
               view $1
             when /^edit (.*)/
@@ -37,7 +37,9 @@ module Shh
 
     def refresh
       commands = ['list', 'refresh', 'quit']
+      @entries = []
       @repository.each_entry do |entry|
+        @entries << "#{entry['name']} (#{entry['id']})"
         commands << "edit #{entry['name']}"
         commands << "view #{entry['name']}"
       end
@@ -45,10 +47,6 @@ module Shh
         commands.grep( /^#{Regexp.escape(text)}/ ).sort
       end
       Readline.completer_word_break_characters = ''
-    end
-
-    def list
-      @repository.each_entry {|entry| say "#{entry['name']} (#{entry['id']})" }
     end
 
     def edit name

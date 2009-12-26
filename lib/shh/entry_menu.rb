@@ -1,10 +1,11 @@
-require 'shh/clipboard'
+require 'shh'
 
 module Shh
   class EntryMenu
     def initialize prompt, hash, read_only=false
       @prompt, @hash, @read_only = prompt, hash, read_only
       @clipboard = Shh.clipboard
+      @launcher = Shh.launcher
       refresh
     end
 
@@ -20,17 +21,15 @@ module Shh
             when 'list'
               say(@hash.keys.sort.join(','))
             when /^edit (.*)/
-              name = $1
-              @hash[name] = new_value(name) unless @read_only
+              edit $1
             when /^copy (.*)/
-              name = $1
-              @clipboard.content = @hash[name] if @clipboard and @hash[name]
+              copy $1
+            when /^launch (.*)/
+              launch $1
             when /^delete (.*)/
-              name = $1
-              @hash.delete(name) unless @read_only
+              delete $1
             when /^show (.*)/
-              name = $1
-              say(@hash[name]) if @hash[name]
+              show $1
           end
         end
       rescue Interrupt => e
@@ -43,13 +42,52 @@ module Shh
 
 private
 
+    def can_copy? key
+     @clipboard and @hash[key]
+    end
+
+    def can_edit?
+      !@read_only
+    end
+
+    def can_launch? key
+      @launcher and @hash[key] =~ /^http\:\/\//
+    end
+
+    def show key
+      say(@hash[key]) if @hash[key]
+    end
+
+    def copy key
+      @clipboard.content = @hash[key] if can_copy?(key) 
+    end
+
+    def edit key
+      if can_edit?
+        @hash[key] = new_value(key)
+        refresh
+      end
+    end
+
+    def delete key
+      if can_edit?
+        @hash.delete(key)
+        refresh
+      end
+    end
+
+    def launch key
+      @launcher.launch @hash[key] if can_launch?(key)
+    end
+
     def refresh
       commands = ['list', 'quit']
       @hash.keys.each do |key|
-        commands << "edit #{key}" unless @read_only
-        commands << "delete #{key}" unless @read_only
+        commands << "edit #{key}" if can_edit?
+        commands << "delete #{key}" if can_edit?
         commands << "show #{key}"
-        commands << "copy #{key}"
+        commands << "copy #{key}" if can_copy?(key)
+        commands << "launch #{key}" if can_launch?(key)
       end
       Readline.completion_proc = lambda do |text|
         commands.grep( /^#{Regexp.escape(text)}/ ).sort
@@ -57,8 +95,8 @@ private
       Readline.completer_word_break_characters = ''
     end
 
-    def new_value name
-      @prompt.get "Enter new value for #{name}", :silent => (name =~ /pass/)
+    def new_value key
+      @prompt.get "Enter new value for #{key}", :silent => (key =~ /pass/)
     end
   end
 end
