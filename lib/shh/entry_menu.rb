@@ -28,8 +28,8 @@ module Shh
               launch $1
             when /^delete,(.*)/
               delete $1
-            when /^show,(.*)/
-              show $1
+            when /^view,(.*)/
+              view $1
           end
         end
       rescue Interrupt => e
@@ -51,10 +51,10 @@ private
     end
 
     def can_launch? key
-      @launcher and @hash[key] =~ /^http\:\/\//
+      @launcher and @hash[key] =~ /^http/
     end
 
-    def show key
+    def view key
       say(@hash[key]) if @hash[key]
     end
 
@@ -85,7 +85,7 @@ private
       @hash.keys.each do |key|
         commands << "edit,#{key}" if can_edit?
         commands << "delete,#{key}" if can_edit?
-        commands << "show,#{key}"
+        commands << "view,#{key}"
         commands << "copy,#{key}" if can_copy?(key)
         commands << "launch,#{key}" if can_launch?(key)
       end
