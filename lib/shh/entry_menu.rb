@@ -20,15 +20,15 @@ module Shh
               return @hash
             when 'list'
               say(@hash.keys.sort.join(','))
-            when /^edit,(.*)/
+            when /^edit (.*)/
               edit $1
-            when /^copy,(.*)/
+            when /^copy (.*)/
               copy $1
-            when /^launch,(.*)/
+            when /^launch (.*)/
               launch $1
-            when /^delete,(.*)/
+            when /^delete (.*)/
               delete $1
-            when /^view,(.*)/
+            when /^view (.*)/
               view $1
           end
         end
@@ -83,15 +83,16 @@ private
     def refresh
       commands = ['list', 'quit']
       @hash.keys.each do |key|
-        commands << "edit,#{key}" if can_edit?
-        commands << "delete,#{key}" if can_edit?
-        commands << "view,#{key}"
-        commands << "copy,#{key}" if can_copy?(key)
-        commands << "launch,#{key}" if can_launch?(key)
+        commands << "edit #{key}" if can_edit?
+        commands << "delete #{key}" if can_edit?
+        commands << "view #{key}"
+        commands << "copy #{key}" if can_copy?(key)
+        commands << "launch #{key}" if can_launch?(key)
       end
       Readline.completion_proc = lambda do |text|
         commands.grep( /^#{Regexp.escape(text)}/ ).sort
       end
+      Readline.completer_word_break_characters = ''
     end
 
     def new_value key
