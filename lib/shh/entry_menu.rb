@@ -105,7 +105,7 @@ private
       Readline.completer_word_break_characters = ''
     end
 
-    def new_value key
+    def set_value key
       new_value = @prompt.get("Enter new value for #{key}", :silent => (key =~ /pass/))
       @hash[key] = new_value if new_value.length > 0
     end
