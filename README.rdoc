@@ -6,7 +6,7 @@ This is a command line utility for managing secure information such as accounts,
 
 You won't be hiding anything from the NSA with this level of encryption so it isn't recommended that you make your repository publicly accessible.
 
-Now with more tab completion!
+Now with more tab completion and multi line editing!
 
 = Usage
 
@@ -48,40 +48,41 @@ This mode allows you to view and edit 'entries' (which are encrypted hashes stor
   rememberthemilk (a499f612-d034-4e49-82a8-6967d29653a1)
 
 * list - list entries
-* edit,<name> - edit or create entry
-* view,<name> - view entry
+* edit <name> - edit or create entry
+* view <name> - view entry
 * quit
 
 == Viewing mode
 
 This mode allows you to view (but not edit) an existing entry
 
-  > view,bitbucket
+  > view bitbucket
   (bitbucket) > list
   id,name,password,username
-  (bitbucket) > view,username
+  (bitbucket) > view username
   markryall
 
   list keys, show key, copy key or quit?  c password
 
 * list - show entry keys
-* view,<key> - view entry value on screen
-* copy,<key> - copy entry value to clipboard
-* launch,<key> - launch entry value in default browser (available if it starts with http)
+* view <key> - view entry value on screen
+* copy <key> - copy entry value to clipboard
+* launch <key> - launch entry value in default browser (available if it starts with http)
 * quit
 
 == Editing mode
 
 This mode is viewing mode plus some editing commands
 
-  > edit,bitbucket
-  (bitbucket) > edit,foo
+  > edit bitbucket
+  (bitbucket) > set foo
   Enter new value for foo
   bar
-  (bitbucket) > delete,foo
+  (bitbucket) > delete foo
 
-* edit,<key> - edit or create key
-* delete,<key> - remove a key
+* edit <key> - edit or create key using text editor (notepad or EDITOR)
+* set <key> - edit or create key from prompt
+* delete <key> - remove a key
 
 == Quitting mode
 
@@ -91,6 +92,5 @@ You don't want to be a quitter
 
 * Add some color
 * Add help
-* Add multi line values (edit with default text editor)
 * Include uuid as part of encryption key (and upgrade encryption on existing entries)
 * add some source control (hg/git) commands

@@ -20,6 +20,8 @@ module Shh
               return @hash
             when 'list'
               say(@hash.keys.sort.join(','))
+            when /^set (.*)/
+              set $1
             when /^edit (.*)/
               edit $1
             when /^copy (.*)/
@@ -62,9 +64,16 @@ private
       @clipboard.content = @hash[key] if can_copy?(key) 
     end
 
+    def set key
+      if can_edit?
+        set_value key
+        refresh
+      end
+    end
+
     def edit key
       if can_edit?
-        @hash[key] = new_value(key)
+        edit_value key
         refresh
       end
     end
@@ -84,6 +93,7 @@ private
       commands = ['list', 'quit']
       @hash.keys.each do |key|
         commands << "edit #{key}" if can_edit?
+        commands << "set #{key}" if can_edit?
         commands << "delete #{key}" if can_edit?
         commands << "view #{key}"
         commands << "copy #{key}" if can_copy?(key)
@@ -96,7 +106,22 @@ private
     end
 
     def new_value key
-      @prompt.get "Enter new value for #{key}", :silent => (key =~ /pass/)
+      new_value = @prompt.get("Enter new value for #{key}", :silent => (key =~ /pass/))
+      @hash[key] = new_value if new_value.length > 0
+    end
+    
+    def edit_value key
+      tmp_file = Pathname.new("key.tmp")
+      begin
+        tmp_file.open('w') { |out| out.print @hash[key] }
+        editor = ENV["EDITOR"] || "notepad"
+        system("#{editor} key.tmp")
+        return unless $?.to_i == 0
+        new_value = tmp_file.read
+        @hash[key] = new_value if new_value.length > 0
+      ensure
+        tmp_file.unlink
+      end
     end
   end
 end
