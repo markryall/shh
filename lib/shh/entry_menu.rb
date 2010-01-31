@@ -1,11 +1,10 @@
-require 'shh'
+require 'splat'
 
 module Shh
   class EntryMenu
     def initialize prompt, hash, read_only=false
       @prompt, @hash, @read_only = prompt, hash, read_only
-      @clipboard = Shh.clipboard
-      @launcher = Shh.launcher
+      @splat = Splat.new
       refresh
     end
 
@@ -43,17 +42,12 @@ module Shh
     end
 
 private
-
-    def can_copy? key
-     @clipboard and @hash[key]
-    end
-
     def can_edit?
       !@read_only
     end
 
     def can_launch? key
-      @launcher and @hash[key] =~ /^http/
+      @splat.supported? and @hash[key] =~ /^http/
     end
 
     def view key
@@ -61,7 +55,7 @@ private
     end
 
     def copy key
-      @clipboard.content = @hash[key] if can_copy?(key) 
+      @splat.clipboard = @hash[key] 
     end
 
     def set key
@@ -86,7 +80,7 @@ private
     end
 
     def launch key
-      @launcher.launch @hash[key] if can_launch?(key)
+      @splat.launch @hash[key] if can_launch?(key)
     end
 
     def refresh
@@ -96,7 +90,7 @@ private
         commands << "set #{key}" if can_edit?
         commands << "delete #{key}" if can_edit?
         commands << "view #{key}"
-        commands << "copy #{key}" if can_copy?(key)
+        commands << "copy #{key}" if @splat.supported?
         commands << "launch #{key}" if can_launch?(key)
       end
       Readline.completion_proc = lambda do |text|
