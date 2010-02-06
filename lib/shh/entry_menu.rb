@@ -31,6 +31,10 @@ module Shh
               delete $1
             when /^view (.*)/
               view $1
+            when /^run (.*)/
+              run $1
+            else
+              puts "I can't imagine what you mean by that" 
           end
         end
       rescue Interrupt => e
@@ -50,12 +54,27 @@ private
       @splat.supported? and @hash[key] =~ /^http/
     end
 
+    def can_run? key
+      @splat.supported? and @hash[key] =~ /^#!\/usr\/bin\/env ruby/
+    end
+
     def view key
       say(@hash[key]) if @hash[key]
     end
 
     def copy key
       @splat.clipboard = @hash[key] 
+    end
+
+    def run key
+      begin
+        hash = @hash
+        splat = @splat
+        eval @hash[key]
+      rescue Exception => e
+        puts e.message
+        e.backtrace.each {|t| puts " > #{t}" }
+      end
     end
 
     def set key
@@ -92,6 +111,7 @@ private
         commands << "view #{key}"
         commands << "copy #{key}" if @splat.supported?
         commands << "launch #{key}" if can_launch?(key)
+        commands << "run #{key}" if can_run?(key)
       end
       Readline.completion_proc = lambda do |text|
         commands.grep( /^#{Regexp.escape(text)}/ ).sort

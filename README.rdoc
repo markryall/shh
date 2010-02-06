@@ -68,6 +68,7 @@ This mode allows you to view (but not edit) an existing entry
 * view <key> - view entry value on screen
 * copy <key> - copy entry value to clipboard
 * launch <key> - launch entry value in default browser (available if it starts with http)
+* run <key> - execute ruby script (available if it starts with #!/usr/bin/env ruby)
 * quit
 
 == Editing mode
@@ -88,9 +89,25 @@ This mode is viewing mode plus some editing commands
 
 You don't want to be a quitter
 
+== Scripting
+
+In a script the following objects are available:
+
+* splat.clipboard = <text> - allows content to be copied to the clipboard
+* splat.browser - a watir compatible browser
+* hash - the current selected entry
+
+Example: 
+
+  browser = splat.browser
+  browser.goto 'http://www.github.com/login'
+  browser.text_field(:id, 'login_field').set hash['username']
+  browser.text_field(:id, 'password').set hash['password']
+  browser.button(:name, 'commit').click
+
 = Future plans for world domination
 
 * Add some color
 * Add help
-* Include uuid as part of encryption key (and upgrade encryption on existing entries)
 * add some source control (hg/git) commands
+* add commands for displaying history of entries
