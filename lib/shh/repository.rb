@@ -1,6 +1,6 @@
-require 'pathname2'
 require 'yaml'
 require 'shh/crypt'
+require 'fileutils'
 
 module Shh
   class Repository
@@ -8,7 +8,7 @@ module Shh
 
     def initialize passphrase, path
       @folder = Pathname.new(File.expand_path(path)) + '.secret'
-      @folder.mkdir_p
+      @folder.mkpath
       @crypt = Crypt.new(passphrase)
     end
 
