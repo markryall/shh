@@ -8,7 +8,7 @@ module Shh
 
     def initialize passphrase, path
       @folder = Pathname.new(File.expand_path(path)) + '.secret'
-      FileUtils.mkdir_p @folder.to_s
+      @folder.mkpath
       @crypt = Crypt.new(passphrase)
     end
 

@@ -16,8 +16,6 @@ Here you sit expectantly in front of a computer at the command line.
 
   gem install shh
 
-(you may need to install gemcutter first)
-
 == Launch
 
 Open all 'secrets' stored in ~/.secret
