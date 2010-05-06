@@ -4,6 +4,8 @@ require 'fileutils'
 
 module Shh
   class Repository
+    include Enumerable
+
     attr_reader :folder
 
     def initialize passphrase, path
@@ -12,19 +14,19 @@ module Shh
       @crypt = Crypt.new(passphrase)
     end
 
-    def each_entry
+    def each
       @folder.children.each do |child|
-        entry = load_entry(child)
+        entry = load(child)
         yield entry if entry
       end
     end
 
-    def find_entry name
-      each_entry {|e| return e if e['name'] == name}
+    def find_by_name name
+      each {|e| return e if e['name'] == name}
       nil
     end
 
-    def load_entry path
+    def load path
       return nil if path.directory?
       yaml = path.open('rb') {|io| @crypt.decrypt(io) }
       entry = YAML::load(yaml)
@@ -32,7 +34,7 @@ module Shh
       path.basename.to_s == entry['id'] ? entry : nil
     end
 
-    def persist_entry entry
+    def persist entry
       (@folder + entry['id']).open('wb') {|io| @crypt.encrypt(entry.to_yaml, io) }
     end
   end

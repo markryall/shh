@@ -7,10 +7,10 @@ module Shh
   class Cli
     def self.execute *args
       prompt = Prompt.new
-      passphrase = prompt.get('Enter your passphrase', :silent => true)
+      passphrase = prompt.ask('Enter your passphrase', :silent => true)
       path = args.shift || ('~')
 
-      EntriesMenu.new(prompt, Repository.new(passphrase, path)).main_loop
+      EntriesMenu.new(prompt, Repository.new(passphrase, path)).push
     end
   end
 end

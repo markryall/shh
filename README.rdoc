@@ -97,8 +97,7 @@ In a script the following objects are available:
 
 Example: 
 
-  browser = splat.browser
-  browser.goto 'http://www.github.com/login'
+  browser = 'http://www.github.com/login'.to_browser
   browser.text_field(:id, 'login_field').set hash['username']
   browser.text_field(:id, 'password').set hash['password']
   browser.button(:name, 'commit').click
