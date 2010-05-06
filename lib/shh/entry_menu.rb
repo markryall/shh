@@ -1,20 +1,21 @@
 require 'shell_shock/context'
 require 'shh/commands'
 
-module Shh::EntryMenu
+class Shh::EntryMenu
+  include Shh::Command
   include ShellShock::Context
 
   def initialize io, entry
     @io, @entry = io, entry
     @commands = {
-      'ls'     => Command.load(:list_keys, entry, io),
-      'set'    => Command.load(:set_key, entry, io),
-      'edit'   => Command.load(:edit_key, entry, io),
-      'cat'    => Command.load(:show_key, entry, io),
-      'cp'     => Command.load(:copy_key, entry, io),
-      'launch' => Command.load(:launch_key, entry, io),
-      'rm'     => Command.load(:remove_key, entry, io),
-      'exec'   => Command.load(:execute_key, entry, io)
+      'ls'     => load_command(:list_keys, entry, io),
+      'set'    => load_command(:set_key, entry, io),
+      'edit'   => load_command(:edit_key, entry, io),
+      'cat'    => load_command(:show_key, entry, io),
+      'cp'     => load_command(:copy_key, entry, io),
+      'launch' => load_command(:launch_key, entry, io),
+      'rm'     => load_command(:remove_key, entry, io),
+      'exec'   => load_command(:execute_key, entry, io)
     }
   end
 
