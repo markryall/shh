@@ -1,10 +1,10 @@
-class Shh::Command::ExecuteKey
-  def initialize entry, io
-    @entry, @io = entry, io
-  end
+require 'shh/command/key_command'
 
-  def completion text
-    @entry.keys.grep(/^#{text}/).sort || []
+class Shh::Command::ExecuteKey
+  include Shh::Command::KeyCommand
+
+  def help
+    "Executes the contents (ruby code) associated with the specified key\nNote that the entire entry is available as a hash called 'entry'"
   end
 
   def execute key=nil

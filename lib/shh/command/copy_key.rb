@@ -1,12 +1,12 @@
+require 'shh/commands'
+require 'shh/command/key_command'
 require 'splat'
 
 class Shh::Command::CopyKey
-  def initialize entry, io
-    @entry, @io = entry, io
-  end
+  include Shh::Command::KeyCommand
 
-  def completion text
-    @entry.keys.grep(/^#{text}/).sort || []
+  def help
+    "Copies the value associated with the specified key to the clipboard"
   end
 
   def execute key=nil

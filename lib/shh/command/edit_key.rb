@@ -1,12 +1,11 @@
+require 'shh/command/key_command'
 require 'splat'
 
 class Shh::Command::EditKey
-  def initialize entry, io
-    @entry, @io = entry, io
-  end
+  include Shh::Command::KeyCommand
 
-  def completion text
-    @entry.keys.grep(/^#{text}/).sort || []
+  def help
+    "Launches an external editor (specified by EDITOR environment variable) to edit the value associated with the specified key"
   end
 
   def execute key=nil

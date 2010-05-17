@@ -1,4 +1,6 @@
 class Shh::Command::ListKeys
+  attr_reader :usage, :help
+
   def initialize entry, io
     @entry, @io = entry, io
   end

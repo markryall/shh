@@ -1,12 +1,11 @@
+require 'shh/command/key_command'
 require 'splat'
 
 class Shh::Command::LaunchKey
-  def initialize entry, io
-    @entry, @io = entry, io
-  end
+  include Shh::Command::KeyCommand
 
-  def completion text
-    @entry.keys.grep(/^#{text}/).sort || []
+  def help
+    "Launches the value (usually a url) associated with the specified key using default application"
   end
 
   def execute key=nil

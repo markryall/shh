@@ -1,5 +1,7 @@
 require File.dirname(__FILE__)+'/spec_helper'
 
+require 'shh/crypt'
+
 describe Shh::Crypt do
   it 'should encrypt and decrypt a string to the same value if given the correct passphrase' do
     crypt = Shh::Crypt.new('passphrase')

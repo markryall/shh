@@ -5,12 +5,12 @@ class Shh::EntriesMenu
   include Shh::Command
   include ShellShock::Context
 
-  def initialize prompt, repository
-    @prompt, @repository = prompt, repository
+  def initialize io, repository
+    @io, @repository = io, repository
     @prompt_text = 'shh > '
     @commands = {
-      'ls'   => load_command(:list_entries, @repository, @prompt),
-      'cd'   => load_command(:open_entry, @repository, @prompt)
+      'ls'   => load_command(:list_entries, @repository, @io),
+      'cd'   => load_command(:open_entry, @repository, @io)
     }
   end
 end
