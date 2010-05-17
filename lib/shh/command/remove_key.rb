@@ -1,10 +1,10 @@
-class Shh::Command::RemoveKey
-  def initialize entry, io
-    @entry, @io = entry, io
-  end
+require 'shh/command/key_command'
 
-  def completion text
-    @entry.keys.grep(/^#{text}/).sort || []
+class Shh::Command::RemoveKey
+  include Shh::Command::KeyCommand
+
+  def help
+    "Removes the specified key from the entry"
   end
 
   def execute key=nil

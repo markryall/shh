@@ -2,8 +2,12 @@ require 'uuidtools'
 require 'shh/entry_menu'
 
 class Shh::Command::OpenEntry
+  attr_reader :usage, :help
+
   def initialize repository, io
     @repository, @io = repository, io
+    @usage = "<entry name>"
+    @help = "Enters a subshell for editing the specifed entry"
   end
 
   def completion text

@@ -4,7 +4,7 @@ class Shh::Command::ListEntries
   def initialize repository, io
     @repository, @io = repository, io
     @usage = "(<substring>)"
-    @help = "Lists all entries"
+    @help = "Lists all entries or those with a name including the specified substring"
   end
 
   def execute text=nil

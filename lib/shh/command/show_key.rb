@@ -1,12 +1,10 @@
-require 'splat'
+require 'shh/command/key_command'
 
 class Shh::Command::ShowKey
-  def initialize entry, io
-    @entry, @io = entry, io
-  end
+  include Shh::Command::KeyCommand
 
-  def completion text
-    @entry.keys.grep(/^#{text}/).sort || []
+  def help
+    "Displays the value associated with the specified key"
   end
 
   def execute key=nil
