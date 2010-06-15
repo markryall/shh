@@ -14,8 +14,8 @@ describe Shh::Command::CopyKey do
 
   it 'should call copy key on entry' do
     @entry['foo'] = stub(:value)
-    expectation = so_when(:value).receives(:to_clipboard)
+    so_when(:value, :as => :clipboard_expectation).receives(:to_clipboard)
     @command.execute 'foo'
-    expectation.should be_matched
+    expectation(:clipboard_expectation).should be_matched
   end
 end
