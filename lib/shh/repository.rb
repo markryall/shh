@@ -30,8 +30,11 @@ module Shh
       return nil if path.directory?
       yaml = path.open('rb') {|io| @crypt.decrypt(io) }
       entry = YAML::load(yaml)
-      return nil unless entry
-      path.basename.to_s == entry['id'] ? entry : nil
+      unless entry and path.basename.to_s == entry['id']
+        $stderr.puts "failed to deserialise #{path}"
+        return nil
+      end
+      entry
     end
 
     def persist entry
