@@ -8,7 +8,8 @@ class Shh::Command::ListEntries
   end
 
   def execute text=nil
-    @repository.each do |entry|
+    @repository.each do |key|
+      entry = @repository[key]
       next if text and !(entry['name'] =~ /#{text}/)
       @io.say "#{entry['name']} (#{entry['id']})"
     end

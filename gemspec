@@ -11,7 +11,8 @@ EOF
   spec.files = Dir['lib/**/*'] + Dir['bin/*'] + ['README.rdoc', 'MIT-LICENSE']
   spec.executables << 'shh'
 
-  spec.add_dependency 'highline', '~>1.5.2'
+  spec.add_dependency 'flat_hash', '~>0.0.2'
+  spec.add_dependency 'highline', '~>1.6.1'
   spec.add_dependency 'uuidtools', '~>2.1.1'
   spec.add_dependency 'crypt', '~>1.1.4'
   spec.add_dependency 'splat', '~>0.1.0'

@@ -11,13 +11,19 @@ class Shh::Command::OpenEntry
   end
 
   def completion text
-    @repository.map{|entry| entry['name']}.grep(/^#{text}/).sort || []
+    @repository.map{|key| @repository[key]['name']}.grep(/^#{text}/).sort || []
   end
 
   def execute name=nil
-    entry = @repository.find_by_name(name)
-    entry ||= {'name' => name, 'id' => UUIDTools::UUID.random_create.to_s}
+    return unless name
+    return if name.empty?
+    entry = nil
+    @repository.each do |key|
+      an_entry = @repository[key]
+      entry = an_entry if an_entry['name'] == name
+    end
+    entry ||= {'name' => name, 'id' => UUIDTools::UUID.random_create.to_s }
     Shh::EntryMenu.new(@io, entry).push
-    @repository.persist entry
+    @repository[entry['id']] = entry
   end
 end
