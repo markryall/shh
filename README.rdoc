@@ -2,7 +2,7 @@
 
 Secret Squirrel
 
-This is a command line utility for managing secure information such as accounts, passwords as individual files so that they can be easily managed in a version control repository.
+This is a command line utility for managing secure information such as accounts, passwords as individual files so that they can be easily managed in either a hg or git version control repository.
 
 You won't be hiding anything from the NSA with this level of encryption so it isn't recommended that you make your repository publicly accessible.
 
@@ -11,6 +11,8 @@ Now with more tab completion and multi line editing!
 = Usage
 
 Here you sit expectantly in front of a computer at the command line.
+
+Either read the explanation below or checkout the following gist: 
 
 == Install
 
@@ -26,6 +28,8 @@ Opens all 'secrets' stored in foo/.secret
 
   > shh foo
 
+Note that shh will crash if the parent directory of .secret does not contain either a .hg or .git.
+
 == Authenticate
 
   Enter your passphrase
@@ -36,52 +40,37 @@ This passphrase will be used to encrypt and decrypt all of your secrets so don't
 
 This mode allows you to view and edit 'entries' (which are encrypted hashes stored in files)
 
-  > list
+  > ls
 
-  bitbucket (260f34de-6779-4367-af2a-44184dec1cc1)
-  amazon (291a3e6c-2c7b-4960-a146-1f6635d9a74e)
-  yahoo (2fe408e7-7f2b-4dc0-854a-c92c21f131ae)
-  evernote (41ad0a21-eafc-4f70-9b0d-0251be207b9e)
-  gmail (8b35c1f2-851d-40fc-bd12-c2aad12c370a)
-  rememberthemilk (a499f612-d034-4e49-82a8-6967d29653a1)
+  amazon
+  bitbucket
+  evernote
+  gmail
+  rememberthemilk
+  yahoo
 
-* list - list entries
-* edit <name> - edit or create entry
-* view <name> - view entry
-* quit
-
-== Viewing mode
-
-This mode allows you to view (but not edit) an existing entry
-
-  > view bitbucket
-  (bitbucket) > list
-  id,name,password,username
-  (bitbucket) > view username
-  markryall
-
-  list keys, show key, copy key or quit?  c password
-
-* list - show entry keys
-* view <key> - view entry value on screen
-* copy <key> - copy entry value to clipboard
-* launch <key> - launch entry value in default browser (available if it starts with http)
-* run <key> - execute ruby script (available if it starts with #!/usr/bin/env ruby)
+* ls - list entries
+* cd <name> - edit or create entry
+* history <name> - view changes related to an entry
+* exhume <cs> <name> - view entry as at the specified changeset
 * quit
 
 == Editing mode
 
-This mode is viewing mode plus some editing commands
-
-  > edit bitbucket
-  (bitbucket) > set foo
+  > cd bitbucket
+  shh:bitbucket > set foo
   Enter new value for foo
   bar
   (bitbucket) > delete foo
 
+* ls - list keys
 * edit <key> - edit or create key using text editor (notepad or EDITOR)
 * set <key> - edit or create key from prompt
-* delete <key> - remove a key
+* cat/less/more - show the value associated with a key
+* cp - copies the value of a key to the system clipboard
+* launch - launches the value associated with the key (really only useful for launching a url)
+* exec - executes the value associated with the key as a script (see scripting below)
+* rm <key> - remove a key
 
 == Quitting mode
 
@@ -89,13 +78,9 @@ You don't want to be a quitter
 
 == Scripting
 
-In a script the following objects are available:
+In a script the current entry is available as a variable called 'entry'
 
-* splat.clipboard = <text> - allows content to be copied to the clipboard
-* splat.browser - a watir compatible browser
-* hash - the current selected entry
-
-Example: 
+Very Contrived Example: 
 
   browser = 'http://www.github.com/login'.to_browser
   browser.text_field(:id, 'login_field').set hash['username']
@@ -105,6 +90,5 @@ Example:
 = Future plans for world domination
 
 * Add some color
-* Add help
-* add some source control (hg/git) commands
-* add commands for displaying history of entries
+* Add more history commands using source control (hg/git) commands
+* Support other source control systems

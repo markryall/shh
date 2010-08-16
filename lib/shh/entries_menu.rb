@@ -10,7 +10,9 @@ class Shh::EntriesMenu
     @prompt_text = 'shh > '
     @commands = {
       'ls'   => load_command(:list_entries, @repository, @io),
-      'cd'   => load_command(:open_entry, @repository, @io)
+      'cd'   => load_command(:open_entry, @repository, @io),
+      'history' => load_command(:show_history, @repository, @io),
+      'exhume' => load_command(:exhume_entry, @repository, @io),
     }
   end
 end
