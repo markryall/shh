@@ -17,6 +17,7 @@ EOF
   spec.add_dependency 'crypt', '~>1.1.4'
   spec.add_dependency 'splat', '~>0.1.0'
   spec.add_dependency 'shell_shock', '~>0.0.3'
+  spec.add_dependency 'activesupport', '~>2.3.8'
 
   spec.add_development_dependency 'rake', '~>0.8.7'
   spec.add_development_dependency 'gemesis', '~>0.0.3'

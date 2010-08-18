@@ -1,30 +1,18 @@
 require 'uuidtools'
+require 'shh/command/historic_entry_command'
 require 'shh/entry_menu'
 
 class Shh::Command::ExhumeEntry
-  attr_reader :usage, :help
+  include Shh::Command::HistoricEntryCommand
 
-  def initialize repository, io
-    @repository, @io = repository, io
-    @usage = "<entry name>"
-    @help = "Enters a subshell for viewing the specifed entry as it was at the specified changeset"
-  end
-
-  def completion text
-    @repository.map{|entry| entry['name']}.grep(/^#{text}/).sort || []
+  def help
+    "Enters a subshell for viewing the specifed entry as it was at the specified revision\nRevision is a number representing the number of changesets to go back in history (ie. 0 is the most recently committed version)"
   end
 
   def execute text=nil
-    if text =~ /^(\w+) (.*)/
-      cs = $1
-      name = $2
-      return unless name
-      return if name.empty?
-      current_entry = @repository.find { |entry| entry['name'] == name }
-      return unless current_entry
-      entry = @repository.element_at(cs, current_entry.id)
-      puts "warning: you are viewing #{name} as at #{cs}, any changes you make will be discarded"
-      Shh::EntryMenu.new(@io, entry).push
+    with_current_and_historic_entry(text) do |current, changeset, historic|
+      puts "warning: you are viewing #{historic['name']} as at #{changeset.id}, any changes you make will be discarded"
+      Shh::EntryMenu.new(@io, historic).push
     end
   end
 end
