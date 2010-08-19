@@ -16,6 +16,7 @@ class Shh::EntriesMenu
       @commands['history'] = load_command(:show_history, @repository, @io)
       @commands['exhume'] = load_command(:exhume_entry, @repository, @io)
       @commands['diff'] = load_command(:diff_entry, @repository, @io)
+      @commands['ci'] = load_command(:commit_changes, @repository, @io)
     end
   end
 end
