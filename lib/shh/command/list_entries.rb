@@ -8,8 +8,13 @@ class Shh::Command::ListEntries
   end
 
   def execute text=nil
-    return if @repository.any?
-    @repository.sort{|l,r| l['name'] <=> r['name']}.each do |entry|
+    @repository.each do |entry|
+      unless entry.id == entry['id']
+        puts "Encryption failure! Did you enter the correct password?"
+        return
+      end
+    end
+    @repository.sort{|l,r| (l['name']) <=> (r['name'])}.each do |entry|
       description = "#{entry['name']} (#{entry.id})"
       next if text and !(description =~ /#{text}/)
       @io.say description
