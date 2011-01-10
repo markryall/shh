@@ -1,5 +1,3 @@
-require 'crypt/blowfish'
-
 case RUBY_VERSION
   when /^1.9/
     begin
@@ -19,6 +17,8 @@ case RUBY_VERSION
     puts "not sure which crypt gem to use for your version of ruby"
     exit 1
 end
+
+require 'crypt/blowfish'
 
 module Shh
   class BlowfishSerialiser
