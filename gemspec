@@ -15,10 +15,10 @@ EOF
   spec.add_dependency 'highline', '~>1.6.1'
   spec.add_dependency 'uuidtools', '~>2.1.1'
   spec.add_dependency 'splat', '~>0.1.1'
-  spec.add_dependency 'shell_shock', '~>0.0.3'
+  spec.add_dependency 'shell_shock', '~>0.0.5'
 
   spec.add_development_dependency 'rake', '~>0.8.7'
   spec.add_development_dependency 'gemesis', '~>0.0.3'
-  spec.add_development_dependency 'rspec', '~>2.2.0'
+  spec.add_development_dependency 'rspec', '~>2.4.0'
   spec.add_development_dependency 'orangutan', '~>0.0.8'
 end
