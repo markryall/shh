@@ -20,5 +20,4 @@ EOF
   spec.add_development_dependency 'rake', '~>0.8.7'
   spec.add_development_dependency 'gemesis', '~>0.0.3'
   spec.add_development_dependency 'rspec', '~>2.4.0'
-  spec.add_development_dependency 'orangutan', '~>0.0.8'
 end
