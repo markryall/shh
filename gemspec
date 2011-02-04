@@ -8,7 +8,7 @@ EOF
   spec.authors << 'Mark Ryall'
   spec.email = 'mark@ryall.name'
   spec.homepage = 'http://github.com/markryall/shh'
-  spec.files = Dir['lib/**/*'] + Dir['spec/**/*'] + Dir['bin/*'] + ['README.rdoc', 'MIT-LICENSE', 'HISTORY.rdoc', '.gemtest']
+  spec.files = Dir['lib/**/*'] + Dir['spec/**/*'] + Dir['bin/*'] + ['README.rdoc', 'MIT-LICENSE', 'HISTORY.rdoc', 'Rakefile', '.gemtest']
   spec.executables << 'shh'
 
   spec.add_dependency 'flat_hash', '~>0'
