@@ -1,0 +1,4 @@
+= 0.2.0
+
+* Added rubygems-test
+* Made gem dependencies more forgiving
