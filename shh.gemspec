@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name = 'shh'
-  spec.version = '0.2.1'
+  spec.version = '0.3.0'
   spec.summary = "command line utility for managing secure information"
   spec.description = <<-EOF
 A command line utility that manages accounts and passwords as individual encypted files
@@ -18,8 +18,8 @@ EOF
   spec.add_dependency 'shell_shock', '~>0'
   spec.add_dependency 'activesupport', '~>3'
   spec.add_dependency 'i18n', '~>0'
+  spec.add_dependency 'crypt19', '~>1'
 
   spec.add_development_dependency 'rake', '~>0.8'
-  spec.add_development_dependency 'gemesis', '~>0'
   spec.add_development_dependency 'rspec', '~>2'
 end
