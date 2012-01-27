@@ -22,4 +22,6 @@ EOF
 
   spec.add_development_dependency 'rake', '~>0.8'
   spec.add_development_dependency 'rspec', '~>2'
+  spec.add_development_dependency 'guard'
+  spec.add_development_dependency 'guard-rspec'
 end
