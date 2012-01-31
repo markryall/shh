@@ -20,7 +20,7 @@ EOF
   spec.add_dependency 'i18n', '~>0'
   spec.add_dependency 'crypt19', '~>1'
 
-  spec.add_development_dependency 'rake', '~>0.8'
+  spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '~>2'
   spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-rspec'
