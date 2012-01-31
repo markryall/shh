@@ -54,6 +54,6 @@ PLATFORMS
 DEPENDENCIES
   guard
   guard-rspec
-  rake (~> 0.8)
+  rake
   rspec (~> 2)
   shh!
