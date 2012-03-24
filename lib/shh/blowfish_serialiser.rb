@@ -1,23 +1,3 @@
-case RUBY_VERSION
-  when /^1.9/
-    begin
-      gem "crypt19", "1.2.1"
-    rescue Exception
-      puts "on ruby 1.9:\ngem install crypt19"
-      exit 1
-    end
-  when /^1.8/
-    begin
-      gem "crypt", "1.1.4"
-    rescue Exception
-      puts "on ruby 1.8:\ngem install crypt19"
-      exit 1
-    end
-  else
-    puts "not sure which crypt gem to use for your version of ruby"
-    exit 1
-end
-
 require 'crypt/blowfish'
 
 module Shh
