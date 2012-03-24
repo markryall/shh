@@ -1,3 +1,4 @@
+
 Gem::Specification.new do |spec|
   spec.name = 'shh'
   spec.version = '0.2.1'
@@ -11,6 +12,8 @@ EOF
   spec.files = Dir['lib/**/*'] + Dir['spec/**/*'] + Dir['bin/*'] + ['README.rdoc', 'MIT-LICENSE', 'HISTORY.rdoc', 'Rakefile', '.gemtest']
   spec.executables << 'shh'
 
+  spec.required_ruby_version = '>= 1.9'
+
   spec.add_dependency 'flat_hash', '~>0'
   spec.add_dependency 'highline', '~>1.6'
   spec.add_dependency 'uuidtools', '~>2'
@@ -18,8 +21,8 @@ EOF
   spec.add_dependency 'shell_shock', '~>0'
   spec.add_dependency 'activesupport', '~>3'
   spec.add_dependency 'i18n', '~>0'
+  spec.add_dependency 'crypt19', '~>1'
 
   spec.add_development_dependency 'rake', '~>0.8'
-  spec.add_development_dependency 'gemesis', '~>0'
   spec.add_development_dependency 'rspec', '~>2'
 end
